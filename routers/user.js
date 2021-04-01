@@ -15,8 +15,19 @@ router.get('/', (req, res) => {
 })
 
 //get by id
-router.get('/:email', (req, res) => {
-    connect.query('select * from users where email = ?', req.params.email, (err, data) => {
+router.get('/:id', (req, res) => {
+    connect.query('select * from users where id = ?', req.params.id, (err, data) => {
+        if (err) {
+            res.status(404).json(err)
+            throw err
+        }
+        res.json(data)
+    })
+})
+
+//get by name
+router.get('/byname/:name', (req, res) => {
+    connect.query('select * from users where name = ?', req.params.name, (err, data) => {
         if (err) {
             res.status(404).json(err)
             throw err
@@ -31,7 +42,6 @@ router.post('/', (req, res) => {
         email: req.body.email,
         password: sha1(req.body.password),
         name: req.body.name,
-        address: req.body.address,
         phone: req.body.phone
     }
 
@@ -47,8 +57,8 @@ router.post('/', (req, res) => {
 
 
 //replace
-router.put('/:email', (req, res) => {
-    connect.query(`update users set ? where email = '${req.params.email}'`, req.body, (err, data) => {
+router.put('/:id', (req, res) => {
+    connect.query(`update users set ? where id = '${req.params.id}'`, req.body, (err, data) => {
         if (err) {
             res.status(404).json(err)
             throw err
@@ -58,8 +68,8 @@ router.put('/:email', (req, res) => {
 })
 
 //remove
-router.delete('/:email', (req, res) => {
-    connect.query(`delete from users where email = '${req.params.email}'`, (err, data) => {
+router.delete('/:id', (req, res) => {
+    connect.query(`delete from users where email = '${req.params.id}'`, (err, data) => {
         if (err) {
             res.status(404).json(err)
             throw err
